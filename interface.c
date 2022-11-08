@@ -151,8 +151,8 @@ menuItem menu_ModeSetupServ_1_3_4_1_1 = {(void*)0,(void*)0,(void*)0,(void*)0,"Пе
 
 menuItem menu_ModeSetupServ_1_3_4_2_0 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.1.Вход 4мА",16,SCR_TYPE_ASK, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_IN4MA,  SECURITY_FREE};
 menuItem menu_ModeSetupServ_1_3_4_2_1 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.2.Вход 20мА",17,SCR_TYPE_ASK, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_IN20MA,  SECURITY_FREE};
-menuItem menu_ModeSetupServ_1_3_4_2_2 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.3.Выход 4мА",17,SCR_TYPE_SET, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_OUT4MA,  SECURITY_FREE};
-menuItem menu_ModeSetupServ_1_3_4_2_3 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.4.Выход 20мА",18,SCR_TYPE_SET, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_OUT20MA,  SECURITY_FREE};
+menuItem menu_ModeSetupServ_1_3_4_2_2 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.3.Выход 4мА",17,SCR_TYPE_CALIB_OUT_4MA, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_OUT4MA,  SECURITY_FREE};
+menuItem menu_ModeSetupServ_1_3_4_2_3 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.3.4.Выход 20мА",18,SCR_TYPE_CALIB_OUT_20MA, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_OUT20MA,  SECURITY_FREE};
 
 
 menuItem menu_ModeSetupServ_1_3_4_3_0 = {(void*)0,(void*)0,(void*)0,(void*)0,"4.4.4.1.Калибров. угла +45",26,SCR_TYPE_ASK, SIMPLE_T,  NO_SEL,(void*)0, 0,0,SAVE_COMMAND_ANGLE_PLUS45,  SECURITY_FREE};
@@ -656,6 +656,8 @@ dsData.output20mA = 20;
 dsData.angle45DegPlus = 120.3;
 dsData.angle45DegMinus = 12.55;
 
+dsData.outStep_mA = 0.01f;
+
 
 	 SetAddrFloatToScreen(&test_screen,&paramScreen_test,&menu_ModeAuto_1_0);
 
@@ -841,8 +843,8 @@ dsData.angle45DegMinus = 12.55;
 //            curr                           Next                           Prev                           Parent                       Child
 	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_0, &menu_ModeSetupServ_1_3_4_2_1, (void*)0,                      &menu_ModeSetupServ_1_3_4_2, &askCurr4mA, (void*)0);
 	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_1, &menu_ModeSetupServ_1_3_4_2_2, &menu_ModeSetupServ_1_3_4_2_0, &menu_ModeSetupServ_1_3_4_2, &askCurr20mA, (void*)0);
-	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_2, &menu_ModeSetupServ_1_3_4_2_3, &menu_ModeSetupServ_1_3_4_2_1, &menu_ModeSetupServ_1_3_4_2, &scSetOutput4mA, (void*)0);
-	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_3, (void*)0,                      &menu_ModeSetupServ_1_3_4_2_2, &menu_ModeSetupServ_1_3_4_2, &scSetOutput20mA, (void*)0);
+	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_2, &menu_ModeSetupServ_1_3_4_2_3, &menu_ModeSetupServ_1_3_4_2_1, &menu_ModeSetupServ_1_3_4_2, (void*)0, (void*)0);
+	 MakeMenu(&menu_ModeSetupServ_1_3_4_2_3, (void*)0,                      &menu_ModeSetupServ_1_3_4_2_2, &menu_ModeSetupServ_1_3_4_2, (void*)0, (void*)0);
 
 	 //калибровка угла
 	 //            curr                           Next                           Prev                           Parent                       Child
@@ -999,6 +1001,14 @@ void ButtonsControlMenu(void)
 		if(VoidToMenu(menu_item->Parent)==NULL)
         dsData.curScreen =  SCREEN_MAIN_DATA;
 	 }
+
+     	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
 	 if(dsData.pushedButton==BUTTON_DOWN)
 	 {
 		dsData.pushedButton=BUTTON_NO;
@@ -1077,6 +1087,11 @@ void ButtonsControlMenu(void)
 		if(menu_item->typeOfNextScr==SCR_TYPE_PASS)  dsData.curScreen =  SCREEN_PASS;    //пароль
 		if(menu_item->typeOfNextScr==SCR_TYPE_SPEED)  dsData.curScreen =  SCREEN_SPEED;   //углы и скорость
 		if(menu_item->typeOfNextScr==SCR_TYPE_DAIG_IP)  dsData.curScreen =  SCREEN_IP_DIAG;  // диагностика IP конв
+		if(menu_item->typeOfNextScr==SCR_TYPE_CALIB_OUT_4MA)  dsData.curScreen =  SCREEN_CALIB_OUT_4MA;  // диагностика IP конв
+		if(menu_item->typeOfNextScr==SCR_TYPE_CALIB_OUT_20MA)  dsData.curScreen =  SCREEN_CALIB_OUT_20MA;  // диагностика IP конв
+
+
+
 	   //	if(menu_item->typeOfNextScr==SCR_TYPE_LIGHT_START)  ;   // легкий старт
 		}
 
@@ -1089,17 +1104,37 @@ void ButtonsControlMenu(void)
 void ButtonsSetParam(screenItem *Scr)
 {
 	float tmp_value;
-    	if(Scr->index==0) Scr->index++;
+	if(Scr->index==0) Scr->index=1;
 	if(dsData.pushedButton==BUTTON_BACK)
-     {
-        dsData.pushedButton=BUTTON_NO;
+	 {
+		dsData.pushedButton=BUTTON_NO;
 		dsData.curScreen =  SCREEN_MAIN_MENU;
-     }
-   	 if(dsData.pushedButton==BUTTON_DOWN)
+	 }
+
+	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
+		if(dsData.pushedButton==BUTTON_LONG_ENTER)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_MENU;
+		*Scr->value_addr = Scr->current_value;
+		Scr->index = 0;
+		dsData.command = menu_item->saveCommand;
+		dsData.curScreen =  SCREEN_MAIN_MENU;
+	 }
+
+
+	 if(dsData.pushedButton==BUTTON_DOWN)
      {
 		dsData.pushedButton=BUTTON_NO;
-		if(Scr->index==0)
-		Scr->current_value = Scr->current_value*(-1.0);
+	 //	if(Scr->index==0)
+	 //	Scr->current_value = Scr->current_value*(-1.0);
+
 		if((Scr->index>0)&&(Scr->index<=Scr->digits))
 		{
 			tmp_value  =  my_pow(10,Scr->digits-Scr->index);
@@ -1111,19 +1146,16 @@ void ButtonsSetParam(screenItem *Scr)
 		   tmp_value  =  1.0/my_pow(10,Scr->index-(Scr->digits+1));
 		   Scr->current_value -=  tmp_value;
 		}
-           if(Scr->current_value<=(-1.0*my_pow(10,Scr->digits)+0.0005))
+		   if(Scr->current_value<=(-1.0*my_pow(10,Scr->digits)+0.0005))
 		   Scr->current_value +=  tmp_value;
-
-           if(Scr->current_value<0.0) Scr->current_value = 0.0;
-
-
-     }
+		 if(Scr->current_value<0) Scr->current_value=0;
+	 }
 	 if(dsData.pushedButton==BUTTON_UP)
      {
 		dsData.pushedButton=BUTTON_NO;
 
-		if(Scr->index==0)
-		Scr->current_value = Scr->current_value*(-1.0);
+	 //	if(Scr->index==0)
+	 //	Scr->current_value = Scr->current_value*(-1.0);
 		if((Scr->index>0)&&(Scr->index<=Scr->digits))
 		{
 			tmp_value = my_pow(10,Scr->digits-Scr->index);
@@ -1141,9 +1173,9 @@ void ButtonsSetParam(screenItem *Scr)
 		if(Scr->index>(Scr->digits+Scr->fractional+1)) {
 
 
-        *Scr->value_addr = Scr->current_value;
-        Scr->index = 0;
-        dsData.command = menu_item->saveCommand;
+		*Scr->value_addr = Scr->current_value;
+		Scr->index = 0;
+		dsData.command = menu_item->saveCommand;
 		dsData.curScreen =  SCREEN_MAIN_MENU;
 
 		}
@@ -1359,7 +1391,7 @@ void MainScreenUpdate()
 		case MODE_CTRL_MANUAL5: LCD_DrawString(8, 1, 3, 0,  "P5%",Font_with_pic,NO_INVERSE);break;
 		case MODE_CTRL_MANUAL10: LCD_DrawString(3, 1, 4, 0,  "P10%",Font_with_pic,NO_INVERSE);break;
 		case MODE_CTRL_MANUAL25: LCD_DrawString(3, 1, 4, 0,  "P25%",Font_with_pic,NO_INVERSE);break;
-		case MODE_CTRL_DIAGNOST: LCD_DrawString(5, 1, 1, 0,  "а",Font_with_pic,NO_INVERSE);break;
+		case MODE_CTRL_DIAGNOST: LCD_DrawString(5, 2, 1, 0,  "а",Font_with_pic,NO_INVERSE);break;
     }
 
 
@@ -1584,6 +1616,14 @@ void  ButtonAskUpdate(void)
 		  dsData.curScreen =  SCREEN_MAIN_MENU;
 
 	 }
+
+     	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
 	 if(dsData.pushedButton==BUTTON_DOWN)
 	 {
 		dsData.pushedButton=BUTTON_NO;
@@ -1646,6 +1686,14 @@ void ButtonSpeedUpdate (void)
 		  dsData.curScreen =  SCREEN_MAIN_MENU;
 
 	 }
+
+	 	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
 	 if(dsData.pushedButton==BUTTON_DOWN)
 	 {
 		dsData.pushedButton=BUTTON_NO;
@@ -1748,8 +1796,9 @@ void ScreenDiagIPUpdate (void)
 
 	tmp = ( dsData.IPVolatge *(126.0 / dsData.IPVolatgeMax));
 	i = (uint8_t) tmp;
+		if((i>=0)&&(i<=126)){
 	LCD_Plot_Vertical_Line (i,32,48,0);
-	LCD_Plot_Vertical_Line (i+1,32,48,0);
+	LCD_Plot_Vertical_Line (i+1,32,48,0); }
 
 	  LCD_Plot_Horisontal_Line (0,127,55,0);
    LCD_DrawString(0, line_5,5, 0, "Назад",ABB_Font,NO_INVERSE);
@@ -1758,6 +1807,166 @@ void ScreenDiagIPUpdate (void)
   LCD_DrawUFloat(104,line_5,0,20,IPVoltageMas[dsData.IPVoltageStepCount],1,2,ABB_Font);
 
 }
+
+
+void ScreenCurCalibr4mAUpdate (void)
+{
+
+   uint8_t i;
+   float tmp;
+	LCD_buffer_clear();
+	LCD_DrawString(0,line_1, 21, 0,  "Калибровка выхода 4мА",LCD_All_Bolt,NO_INVERSE);
+	   LCD_Plot_Horisontal_Line (0,127,12,0);
+   LCD_Plot_Horisontal_Line (0,127,13,0);
+
+	LCD_Plot_Horisontal_Line (0,127,30,0);
+	LCD_Plot_Vertical_Line (0,31,49,0);
+
+	LCD_Plot_Horisontal_Line (0,127,50,0);
+	LCD_Plot_Vertical_Line (127,31,49,0);
+
+	LCD_DrawUFloat(45,line_2,0,20,dsData.output4mA,1,2,LCD_All_Bolt);
+	LCD_DrawString(0,line_2, 3, 0,  "3мА",LCD_All_Bolt,NO_INVERSE);
+	LCD_DrawUFloat(100,line_2,0,20,6.0,1,2,LCD_All_Bolt);
+
+	tmp = ( (dsData.output4mA-3.0) *(126.0 / 3.0));
+	i = (uint8_t) tmp;
+		if((i>=0)&&(i<=126)){
+	LCD_Plot_Vertical_Line (i,32,48,0);
+	LCD_Plot_Vertical_Line (i+1,32,48,0);  }
+
+	  LCD_Plot_Horisontal_Line (0,127,55,0);
+   LCD_DrawString(0, line_5,5, 0, "Назад",ABB_Font,NO_INVERSE);
+  LCD_DrawString(35, line_5,9, 0, "^Изменить",ABB_Font,NO_INVERSE);
+  LCD_DrawString(86, line_5,4, 0, "Шаг:",ABB_Font,NO_INVERSE);
+  LCD_DrawUFloat(104,line_5,0,20,IPVoltageMas[dsData.IPVoltageStepCount],1,2,ABB_Font);
+
+}
+void ButtonCurCalibr4mAUpdate (void)
+{
+ if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
+		if(dsData.pushedButton==BUTTON_BACK)
+	 {
+		  dsData.pushedButton=BUTTON_NO;
+		  dsData.curScreen =  SCREEN_MAIN_MENU;
+
+	 }
+	 if(dsData.pushedButton==BUTTON_DOWN)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.command = SAVE_COMMAND_OUT_4MA_CAL_DEC;
+
+	 }
+	 if(dsData.pushedButton==BUTTON_UP)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.command = SAVE_COMMAND_OUT_4MA_CAL_INC;
+	 }
+	  if(dsData.pushedButton==BUTTON_ENTER)
+	 {
+	   dsData.pushedButton=BUTTON_NO;
+	   dsData.IPVoltageStepCount++;
+	   if(dsData.IPVoltageStepCount>=IP_VOLTAGE_STEPS)  dsData.IPVoltageStepCount = 0;
+	   dsData.outStep_mA = IPVoltageMas[dsData.IPVoltageStepCount];
+
+	 }
+
+	   if(dsData.pushedButton==BUTTON_ENTER)
+	 {
+	   //dsData.pushedButton=BUTTON_NO;
+	   //dsData.command = SAVE_COMMAND_OUT4MA;
+	   //dsData.curScreen =  SCREEN_MAIN_MENU;
+	 }
+
+}
+
+
+void ScreenCurCalibr20mAUpdate (void)
+{
+
+   uint8_t i;
+   float tmp;
+	LCD_buffer_clear();
+	LCD_DrawString(0,line_1, 22, 0,  "Калибровка выхода 20мА",LCD_All_Bolt,NO_INVERSE);
+	   LCD_Plot_Horisontal_Line (0,127,12,0);
+   LCD_Plot_Horisontal_Line (0,127,13,0);
+
+	LCD_Plot_Horisontal_Line (0,127,30,0);
+   	LCD_Plot_Vertical_Line (0,31,49,0);
+
+	LCD_Plot_Horisontal_Line (0,127,50,0);
+	LCD_Plot_Vertical_Line (127,31,49,0);
+
+	LCD_DrawUFloat(45,line_2,0,20,dsData.output20mA,2,2,LCD_All_Bolt);
+	LCD_DrawString(0,line_2, 4, 0,  "16мА",LCD_All_Bolt,NO_INVERSE);
+	LCD_DrawUFloat(95,line_2,0,20,24.0,2,2,LCD_All_Bolt);
+
+	tmp = ( (dsData.output20mA-16.0 )*(126.0 / 8.0));
+	i = (uint8_t) tmp;
+	if((i>=0)&&(i<=126)){
+	LCD_Plot_Vertical_Line (i,32,48,0);
+	LCD_Plot_Vertical_Line (i+1,32,48,0);  }
+
+	  LCD_Plot_Horisontal_Line (0,127,55,0);
+   LCD_DrawString(0, line_5,5, 0, "Назад",ABB_Font,NO_INVERSE);
+  LCD_DrawString(35, line_5,9, 0, "^Изменить",ABB_Font,NO_INVERSE);
+  LCD_DrawString(86, line_5,4, 0, "Шаг:",ABB_Font,NO_INVERSE);
+  LCD_DrawUFloat(104,line_5,0,20,IPVoltageMas[dsData.IPVoltageStepCount],1,2,ABB_Font);
+
+}
+
+
+
+void ButtonCurCalibr20mAUpdate (void)
+{
+
+     	 	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+		if(dsData.pushedButton==BUTTON_BACK)
+	 {
+		  dsData.pushedButton=BUTTON_NO;
+		  dsData.curScreen =  SCREEN_MAIN_MENU;
+
+	 }
+	 if(dsData.pushedButton==BUTTON_DOWN)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.command = SAVE_COMMAND_OUT_20MA_CAL_DEC;
+
+	 }
+	 if(dsData.pushedButton==BUTTON_UP)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.command = SAVE_COMMAND_OUT_20MA_CAL_INC;
+	 }
+	  if(dsData.pushedButton==BUTTON_ENTER)
+	 {
+	   //dsData.pushedButton=BUTTON_NO;
+	   //dsData.command = SAVE_COMMAND_OUT20MA;
+	   //dsData.curScreen =  SCREEN_MAIN_MENU;
+	 }
+
+	 if(dsData.pushedButton==BUTTON_ENTER)
+	 {
+	   dsData.pushedButton=BUTTON_NO;
+	   dsData.IPVoltageStepCount++;
+	   if(dsData.IPVoltageStepCount>=IP_VOLTAGE_STEPS)  dsData.IPVoltageStepCount = 0;
+		dsData.outStep_mA = IPVoltageMas[dsData.IPVoltageStepCount];
+	 }
+
+}
+
+
 
 
 void ButtonLightStartUpdate (void)
@@ -1772,6 +1981,14 @@ void ButtonLightStartUpdate (void)
 		  dsData.curScreen =  SCREEN_MAIN_MENU;
 
 	 }
+
+	 	if(dsData.pushedButton==BUTTON_LONG_BACK)
+	 {
+		dsData.pushedButton=BUTTON_NO;
+		dsData.curScreen =  SCREEN_MAIN_DATA;
+
+	 }
+
 	 if(dsData.pushedButton==BUTTON_DOWN)
 	 {
 		dsData.pushedButton=BUTTON_NO;
@@ -1878,6 +2095,14 @@ void RefreshMenu(void)
 		  case SCREEN_IP_DIAG:
 		  {ButtonDiagIPUpdate();
 		  ScreenDiagIPUpdate();           				break;}
+
+		  case SCREEN_CALIB_OUT_4MA:
+		  {ButtonCurCalibr4mAUpdate();
+		  ScreenCurCalibr4mAUpdate();           				break;}
+
+		  case SCREEN_CALIB_OUT_20MA:
+		  {ButtonCurCalibr20mAUpdate();
+		  ScreenCurCalibr20mAUpdate();           				break;}
 
 		  case SCREEN_SPEED:
 		  {ButtonSpeedUpdate();

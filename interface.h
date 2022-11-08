@@ -3,7 +3,7 @@
 #ifndef __MENU_CTRL_H
 #define __MENU_CTRL_H
 
-#define FIRMWARE "Прошивка            v. 1.0.8.16"
+#define FIRMWARE "Прошивка            v. 1.0.8.24"
 #define FIRMWARE_TEXT_SIZE 31
 
 #define SCREEN_MAIN_DATA       0
@@ -17,6 +17,8 @@
 #define SCREEN_SPEED           8
 #define SCREEN_PASS            9
 #define SCREEN_LIGHT_START     10
+#define SCREEN_CALIB_OUT_4MA   11
+#define SCREEN_CALIB_OUT_20MA   12
 
 #define INVERSE                1
 #define NO_INVERSE             0
@@ -60,7 +62,8 @@
 #define BUTTON_DOWN			   2
 #define BUTTON_UP			   3
 #define BUTTON_ENTER		   4
-
+#define BUTTON_LONG_ENTER	   5
+#define BUTTON_LONG_BACK	   6
 
 #define TYPE1 250 // заглушка для типа
 
@@ -96,7 +99,7 @@
 
 
 
-#define INTERFACE_NUMBER_OF_COMMAND         72
+#define INTERFACE_NUMBER_OF_COMMAND         76
 
 #define SAVE_COMMAND_IDLE       	         0
 #define SAVE_COMMAND_LIGHT_START             1 // not used
@@ -161,8 +164,8 @@
 #define SAVE_COMMAND_DEADZ_UP               49
 #define SAVE_COMMAND_IN4MA                  50
 #define SAVE_COMMAND_IN20MA                 51
-#define SAVE_COMMAND_OUT4MA                 52
-#define SAVE_COMMAND_OUT20MA                53
+#define SAVE_COMMAND_OUT4MA            		52
+#define SAVE_COMMAND_OUT20MA           		53
 #define SAVE_COMMAND_ANGLE_PLUS45           54
 #define SAVE_COMMAND_ANGLE_MINUS45          55
 #define SAVE_COMMAND_DEADZ_VALVE            56
@@ -183,6 +186,13 @@
 
 #define SAVE_COMMAND_INC_PERCENT       		70
 #define SAVE_COMMAND_DEC_PERCENT       		71
+
+#define SAVE_COMMAND_OUT_4MA_CAL_INC       	72
+#define SAVE_COMMAND_OUT_4MA_CAL_DEC       	73
+
+#define SAVE_COMMAND_OUT_20MA_CAL_INC       74
+#define SAVE_COMMAND_OUT_20MA_CAL_DEC       75
+
 
 #define SEL                             1
 #define NO_SEL                          0
@@ -207,7 +217,8 @@
 #define SCR_TYPE_ERROR                  10
 #define SCR_TYPE_LIGHT_START            11
 #define SCR_TYPE_PROGRESS               12
-
+#define SCR_TYPE_CALIB_OUT_4MA          13
+#define SCR_TYPE_CALIB_OUT_20MA         14
 
 #define SELECT_TYPE_AUTO  				100
 #define SELECT_TYPE_MAN1  				101
@@ -405,6 +416,8 @@ float input20mA;
 
 float output4mA;  // настройка исх ток петли
 float output20mA;
+float outStep_mA;
+
 
 float angle45DegPlus;   //настройка углов
 float angle45DegMinus;

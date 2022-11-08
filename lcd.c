@@ -300,7 +300,7 @@ void LCD_DrawUFloat(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint8_t setNum, 
 		val = num_L *-1.0;
  }
  else  {
- float_to_str[0] = '+';
+ float_to_str[0] = ' ';
  val=num_L;
  }
  float_to_str[sizeInt_L+1]='.';

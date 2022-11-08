@@ -45,9 +45,36 @@
 */
 
 
+
 #include <stdint.h>
 
 
+
+#if (0x0 == 0x0)
+static const uint8_t image_data_Font_with_pic_0x20[18] = {
+    
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00
+};
+static const tImage Font_with_pic_0x20 = { image_data_Font_with_pic_0x20,
+    6, 24, 8};
+#endif
 
 #if (0x0 == 0x0)
 static const uint8_t image_data_Font_with_pic_0x25[39] = {
@@ -97,29 +124,20 @@ static const tImage Font_with_pic_0x25 = { image_data_Font_with_pic_0x25,
 #endif
 
 #if (0x0 == 0x0)
-static const uint8_t image_data_Font_with_pic_0x2b[27] = {
+static const uint8_t image_data_Font_with_pic_0x2b[18] = {
     
     0x00, 
     0x00, 
-    0x00, 
-    0x07, 
-    0x07, 
-    0x00, 
-    0x00, 
+    0x03, 
+    0x03, 
     0x00, 
     0x00, 
     0xc0, 
     0xc0, 
-    0xc0, 
-    0xf8, 
-    0xf8, 
-    0xc0, 
+    0xf0, 
+    0xf0, 
     0xc0, 
     0xc0, 
-    0x00, 
-    0x00, 
-    0x00, 
-    0x00, 
     0x00, 
     0x00, 
     0x00, 
@@ -128,7 +146,7 @@ static const uint8_t image_data_Font_with_pic_0x2b[27] = {
     0x00
 };
 static const tImage Font_with_pic_0x2b = { image_data_Font_with_pic_0x2b,
-    9, 17, 8};
+    6, 17, 8};
 #endif
 
 #if (0x0 == 0x0)
@@ -152,7 +170,7 @@ static const tImage Font_with_pic_0x2c = { image_data_Font_with_pic_0x2c,
 #endif
 
 #if (0x0 == 0x0)
-static const uint8_t image_data_Font_with_pic_0x2d[27] = {
+static const uint8_t image_data_Font_with_pic_0x2d[18] = {
     
     0x00, 
     0x00, 
@@ -160,21 +178,12 @@ static const uint8_t image_data_Font_with_pic_0x2d[27] = {
     0x00, 
     0x00, 
     0x00, 
-    0x00, 
-    0x00, 
-    0x00, 
     0xc0, 
     0xc0, 
     0xc0, 
     0xc0, 
     0xc0, 
     0xc0, 
-    0xc0, 
-    0xc0, 
-    0x00, 
-    0x00, 
-    0x00, 
-    0x00, 
     0x00, 
     0x00, 
     0x00, 
@@ -183,7 +192,7 @@ static const uint8_t image_data_Font_with_pic_0x2d[27] = {
     0x00
 };
 static const tImage Font_with_pic_0x2d = { image_data_Font_with_pic_0x2d,
-    9, 17, 8};
+    6, 17, 8};
 #endif
 
 #if (0x0 == 0x0)
@@ -806,9 +815,12 @@ static const uint8_t image_data_Font_with_pic_0xe0[78] = {
     0x0f, 
     0x0f, 
     0x0f, 
+    0x0f, 
     0x07, 
     0x07, 
     0x07, 
+    0x07, 
+    0x03, 
     0x03, 
     0x03, 
     0x03, 
@@ -817,20 +829,17 @@ static const uint8_t image_data_Font_with_pic_0xe0[78] = {
     0x01, 
     0x01, 
     0x01, 
-    0x00, 
-    0x00, 
-    0x00, 
-    0x00, 
     0x01, 
     0x03, 
     0x07, 
     0x0f, 
-    0x0f, 
-    0x0f, 
-    0x0f, 
-    0x07, 
-    0x03, 
-    0x01, 
+    0x1f, 
+    0x1f, 
+    0x1f, 
+    0x1e, 
+    0x0e, 
+    0x06, 
+    0x02, 
     0x80, 
     0xc0, 
     0xe0, 
@@ -845,9 +854,12 @@ static const uint8_t image_data_Font_with_pic_0xe0[78] = {
     0x00, 
     0x00, 
     0x00, 
+    0x00, 
     0x80, 
     0x80, 
     0x80, 
+    0x80, 
+    0x80, 
     0xc0, 
     0xc0, 
     0xc0, 
@@ -856,23 +868,20 @@ static const uint8_t image_data_Font_with_pic_0xe0[78] = {
     0xe0, 
     0xe0, 
     0xe0, 
-    0xf0, 
-    0xf0, 
-    0xf0, 
+    0xe0, 
     0xf0, 
     0xf8, 
     0xfc, 
     0xfe, 
-    0xff, 
-    0xff, 
-    0x9f, 
-    0x0f, 
-    0x0e, 
-    0x0c, 
-    0x08
+    0xfe, 
+    0x3e, 
+    0x1e, 
+    0x1c, 
+    0x18, 
+    0x10
 };
 static const tImage Font_with_pic_0xe0 = { image_data_Font_with_pic_0xe0,
-    39, 16, 8};
+    39, 15, 8};
 #endif
 
 #if (0x0 == 0x0)
@@ -2222,6 +2231,14 @@ static const tImage Font_with_pic_0xff = { image_data_Font_with_pic_0xff,
 static const tChar Font_with_pic_array[] = {
 
 #if (0x0 == 0x0)
+  // character: ' '
+  {0x20, &Font_with_pic_0x20},
+#else
+  // character: ' ' == ''
+  {0x20, &Font_with_pic_0x},
+#endif
+
+#if (0x0 == 0x0)
   // character: '%'
   {0x25, &Font_with_pic_0x25},
 #else
@@ -2623,5 +2640,5 @@ static const tChar Font_with_pic_array[] = {
 
 };
 
-const tFont Font_with_pic[2] = { 48, Font_with_pic_array };
+const tFont Font_with_pic[2] = { 51, Font_with_pic_array };
 
