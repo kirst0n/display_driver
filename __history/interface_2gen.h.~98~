@@ -1,0 +1,559 @@
+#include "stdint.h"
+//#include "inttypes.h"
+#ifndef __MENU_CTRL_H
+#define __MENU_CTRL_H
+
+#define FIRMWARE "Прошивка            v. 1.0.8.16"
+#define FIRMWARE_TEXT_SIZE 31
+
+#define SCREEN_MAIN_DATA       0
+#define SCREEN_MAIN_MENU       1
+#define SCREEN_SET_PPARAM      2
+#define SCREEN_PROGRESS        3
+#define SCREEN_ERRORS          4
+#define SCREEN_ACCEPT          5
+#define SCREEN_ASK             6
+#define SCREEN_IP_DIAG         7
+#define SCREEN_SPEED           8
+#define SCREEN_PASS            9
+#define SCREEN_LIGHT_START     10
+
+#define INVERSE                1
+#define NO_INVERSE             0
+
+#define MODE_CTRL_AUTO         0
+#define MODE_CTRL_MANUAL1      1
+#define MODE_CTRL_MANUAL5      2
+#define MODE_CTRL_MANUAL10     3
+#define MODE_CTRL_MANUAL25     4
+#define MODE_CTRL_DIAGNOST     5
+
+#define MODE_ROTATION_RIGHT    0
+#define MODE_ROTATION_LEFT     1
+
+#define MODE_DRIVER_ROTATE     0
+#define MODE_DRIVER_LINE       1
+
+#define MODE_DIRECTION_FORWARD 0
+#define MODE_DIRECTION_REVERSE 1
+
+#define MODE_FEEDBACK_FORWARD  0
+#define MODE_FEEDBACK_REVERSE  1
+
+#define MODE_CHARACTER_LINE    0
+#define MODE_CHARACTER_PERCENT 1
+#define MODE_CHARACTER_USER    3
+
+#define MODE_LANG_RUS		   0
+#define MODE_LANG_ENG		   1
+#define MODE_LANG_CHI		   2
+
+#define MODE_DISPLAY_NORMAL    0
+#define MODE_DISPLAY_REVERSE   1
+
+#define MODE_OTSECHKA          0
+#define MODE_LIMIT             1
+
+//дефайны нажатой кнопки
+#define BUTTON_NO			   0
+#define BUTTON_BACK			   1
+#define BUTTON_DOWN			   2
+#define BUTTON_UP			   3
+#define BUTTON_ENTER		   4
+
+
+#define TYPE1 250 // заглушка для типа
+
+
+
+#define TYPE_IDLE                    0
+#define TYPE_LIGHT_START             1
+#define TYPE_DIAGNOSTIC              2
+#define TYPE_LIMITS_BORDER           3
+#define TYPE_FULL_START              4
+#define TYPE_AUTO_PARAM              5
+#define TYPE_DEAFULT_SETTINGS        6
+
+
+#define TYPE_ERRORS        			 		243
+#define TYPE_VALUABLE_INT                	244
+#define TYPE_VALUABLE_3_1                	245
+#define TYPE_VALUABLE_2_2                	246
+#define TYPE_PREV_TO                 		248
+#define TYPE_NEXT_TO                	 	247
+
+
+#define NUMBER_OF_ERRORS 15
+
+
+
+
+#define INTERFACE_NUMBER_OF_COMMAND         70
+
+#define SAVE_COMMAND_IDLE       	         0
+#define SAVE_COMMAND_LIGHT_START             1 // not used
+#define SAVE_COMMAND_DIAGNOSTIC              2 // not used
+#define SAVE_COMMAND_START_LIMITS_BORDER     3
+#define SAVE_COMMAND_START_FULL_START        4
+#define SAVE_COMMAND_START_AUTO_PARAM        5
+#define SAVE_COMMAND_DEAFULT_SETTINGS        6
+#define SAVE_COMMAND_SAVE                    7     // not used
+#define SAVE_COMMAND_ACCEPT                  8
+#define SAVE_COMMAND_ABORT                   9
+
+
+#define SAVE_COMMAND_NO                     0
+
+#define SAVE_COMMAND_AUTO					10
+#define SAVE_COMMAND_MAN1                   11
+#define SAVE_COMMAND_MAN5                   12
+#define SAVE_COMMAND_MAN10                  13
+#define SAVE_COMMAND_MAN25                  14
+#define SAVE_COMMAND_ROTAT_FORV             15
+#define SAVE_COMMAND_ROTAT_BACK             16
+#define SAVE_COMMAND_DRV_ROT                17
+#define SAVE_COMMAND_DRV_LINE               18
+#define SAVE_COMMAND_POS_FORV               19
+#define SAVE_COMMAND_POS_BACK               20
+#define SAVE_COMMAND_FEEDBACK_FORV          21
+#define SAVE_COMMAND_FEEDBACK_BACK          22
+#define SAVE_COMMAND_CHAR_LINE              23
+#define SAVE_COMMAND_CHAR_PERC              24
+#define SAVE_COMMAND_CHAR_USER              25
+#define SAVE_COMMAND_LANG_RU                26
+#define SAVE_COMMAND_LANG_EN                27
+#define SAVE_COMMAND_LANG_CH                28
+#define SAVE_COMMAND_DISP_NORM              29
+#define SAVE_COMMAND_DISP_REV               30
+#define SAVE_COMMAND_DIAG                   31
+
+
+#define SAVE_COMMAND_LIMITS_BORDER          32
+#define SAVE_COMMAND_FULL_START             33
+#define SAVE_COMMAND_AUTO_PARAM             34
+#define SAVE_COMMAND_RESERV                 35
+
+
+
+#define SAVE_COMMAND_VALVE_0                36
+#define SAVE_COMMAND_VALVE_100              37
+
+#define SAVE_COMMAND_OTSECHKA_0PER          38     //изменение самого параметра
+#define SAVE_COMMAND_OTSECHKA_100PER        39
+#define SAVE_COMMAND_LIMIT_0PER             40
+#define SAVE_COMMAND_LIMIT_100PER           41
+
+#define SAVE_COMMAND_PINC                   42
+#define SAVE_COMMAND_PDEC                   43
+#define SAVE_COMMAND_IINC                   44
+#define SAVE_COMMAND_IDEC                   45
+#define SAVE_COMMAND_DINC                   46
+#define SAVE_COMMAND_DDEC                   47
+#define SAVE_COMMAND_DEADZ_DOWN             48
+#define SAVE_COMMAND_DEADZ_UP               49
+#define SAVE_COMMAND_IN4MA                  50
+#define SAVE_COMMAND_IN20MA                 51
+#define SAVE_COMMAND_OUT4MA                 52
+#define SAVE_COMMAND_OUT20MA                53
+#define SAVE_COMMAND_ANGLE_PLUS45           54
+#define SAVE_COMMAND_ANGLE_MINUS45          55
+#define SAVE_COMMAND_DEADZ_VALVE            56
+
+#define SAVE_COMMAND_LOAD_SETTINGS          57
+#define SAVE_COMMAND_SAVE_SETTINGS          58
+#define SAVE_COMMAND_FULL_WIPE              59
+#define SAVE_COMMAND_REBOOT                 60
+#define SAVE_COMMAND_CLEAR_ERROR            61
+#define SAVE_COMMAND_SPEED_MEAS_UP          62
+#define SAVE_COMMAND_SPEED_MEAS_DOWN        63
+#define SAVE_COMMAND_IP_VOLTAGE_INC         64
+#define SAVE_COMMAND_IP_VOLTAGE_DEC         65
+#define SAVE_COMMAND_SET_OTCECHKA_0PER      66    //изменение режима
+#define SAVE_COMMAND_SET_OTCECHKA_100PER    67
+#define SAVE_COMMAND_SET_LIMIT_0PER   		68
+#define SAVE_COMMAND_SET_LIMIT_100PER       69
+
+
+
+#define SEL                             1
+#define NO_SEL                          0
+
+#define TYPE_NULL                       0
+
+#define SIMPLE_T                        1
+#define SELECT_T                        2
+#define VAL_INT                         3
+#define VAL_FLOAT                       4
+#define VAL_DATE_NEXT                   5
+#define VAL_DATE_PREV                   6
+#define VAL_ERR                         7
+
+#define SCR_TYPE_NULL                   0
+#define SCR_TYPE_MENU                   4
+#define SCR_TYPE_ASK                    5
+#define SCR_TYPE_SET                    6
+#define SCR_TYPE_PASS                   7
+#define SCR_TYPE_SPEED                  8
+#define SCR_TYPE_DAIG_IP                9
+#define SCR_TYPE_ERROR                  10
+#define SCR_TYPE_LIGHT_START            11
+#define SCR_TYPE_PROGRESS               12
+
+
+#define SELECT_TYPE_AUTO  				100
+#define SELECT_TYPE_MAN1  				101
+#define SELECT_TYPE_MAN5  				102
+#define SELECT_TYPE_MAN10  			    103
+#define SELECT_TYPE_MAN25  			    104
+#define SELECT_TYPE_ROTAT_FORV  		105
+#define SELECT_TYPE_ROTAT_BACK  		106
+#define SELECT_TYPE_DRV_ROT 			107
+#define SELECT_TYPE_DRV_LINE  			108
+#define SELECT_TYPE_POS_FORV  			109
+#define SELECT_TYPE_POS_BACK  			110
+#define SELECT_TYPE_FEEDBACK_FORV  	    111
+#define SELECT_TYPE_FEEDBACK_BACK  	    112
+#define SELECT_TYPE_CHAR_LINE  		    113
+#define SELECT_TYPE_CHAR_PERC  		    114
+#define SELECT_TYPE_CHAR_USER  		    115
+#define SELECT_TYPE_LANG_RU  			116
+#define SELECT_TYPE_LANG_EN  			117
+#define SELECT_TYPE_LANG_CH  			118
+#define SELECT_TYPE_DISP_NORM  		    119
+#define SELECT_TYPE_DISP_REV  			120
+#define SELECT_TYPE_DIAG  				121
+#define SELECT_TYPE_0PER_OSECHKA		122
+#define SELECT_TYPE_100PER_OSECHKA 		123
+#define SELECT_TYPE_0PER_LIMIT			124
+#define SELECT_TYPE_100PER_LIMIT		125
+
+#define IP_VOLTAGE_STEPS 				3
+#define IP_VOLTAGE_1					0.01
+#define IP_VOLTAGE_2                    0.05
+#define IP_VOLTAGE_3                    0.1
+
+#define SECURITY_FREE                   0
+#define SECURITY_LVL1                   1
+#define SECURITY_LVL2                   2
+
+
+
+
+
+
+typedef struct menuItem{
+		void       *Next;
+		void       *Previous;
+		void       *Parent;
+		void       *Child;
+		char        Text[40];
+		uint8_t     textSize;
+		uint8_t     typeOfNextScr;
+        uint8_t     typeOfCurrScr;
+   	    uint8_t     Selected;         //  флаг выбран ли [*] текущий пункт
+        void      *AddrValue;       // адрес на переменную
+        uint8_t     digits;
+        uint8_t     fractional;
+		uint8_t		saveCommand;
+        uint8_t     security;
+
+} menuItem;
+
+typedef struct progressItem{
+void       *Previous;
+uint8_t		saveCommand;
+
+}progressItem;
+
+
+
+typedef struct lightStartItem{
+		void       *Next;
+		void       *Previous;
+		void       *Parent;
+		void       *Child;
+		char        Text[40];
+		char        Caption[40];
+		uint8_t     textSize;
+		uint8_t     captionSize;
+		uint8_t     Selected;
+		uint8_t		saveCommand;
+		uint8_t     typeOfNextScr;
+		uint8_t     value;
+		uint8_t    *AddrValue;
+}lightStartItem;
+
+
+
+typedef struct askItem{
+		void       *Previous;
+        char        Text1[40];
+        char        Text2[40];
+        uint8_t     textSize1;
+        uint8_t     textSize2;
+		uint8_t		saveCommand;
+}askItem;
+
+typedef struct errorList{
+		void       *Next;
+		void       *Previous;
+		void       *ParentMenuItem;
+		uint16_t	   index;
+		uint8_t		   type;
+		uint8_t lengh1;
+		uint8_t lengh2;
+		uint8_t lengh3;
+		char  Text1[25];
+		char  Text2[25];
+		char  Text3[25];
+}errorList;
+
+typedef struct screenItem{
+		void       *Previous;
+        uint8_t    typeScreen;
+        uint8_t    index;
+        float      *value_addr;
+        float      current_value;
+        uint8_t    digits;
+        uint8_t    fractional;
+        char       Text[40];
+
+}screenItem;
+
+typedef struct lcdDate{
+uint8_t day;
+uint8_t month;
+uint8_t year;
+}lcdDate;
+
+typedef struct acceptScr{
+uint8_t index;
+screenItem *ScrSource;
+}acceptScr;
+
+
+typedef struct displayData{
+
+uint8_t pushedButton;   //кнопка дефайны BUTTON_NO, BUTTON_BACK, BUTTON_DOWN, BUTTON_UP, BUTTON_ENTER
+uint8_t curScreen;     // тип экрана который отображатеся, основной  SCREEN_MAIN_DATA  меню SCREEN_MAIN_MENU, установка параметров SCREEN_SET_PPARAM
+
+uint8_t modeCtrl;   //тип режима управления авто MODE_CTRL_AUTO, ручной MODE_CTRL_MANUAL25, диагностика MODE_CTRL_DIAGNOST
+float settingPer;   //уставка в %
+float settingCur;   // уставка в мА
+float positionPer;   // положение в %
+float positionCur;   // положение в мА
+float errorPer;      // рассоглосование
+float curPosStockDeg; // положение штока в град
+float inPressure;    // входное давление
+float outPressure1; // исх давл1
+float outPressure2; // исх давл2
+float topLimitDeg;  //верхнее ограничение в град
+float botLimitDeg;  //нижнее ограничение в град
+float topLimitPer;
+float botLimitPer;
+float temperature;     //температура
+uint32_t workingTime;  //вообще написано в часах, можно в минутах или секундах мерить и выводить в часах;
+uint32_t cycles;       //кол-во циклов наработки
+uint32_t idNumber;     //ид номер
+lcdDate lastService;   //последнее обслуживание
+lcdDate nextService;   //след обсл.
+
+uint8_t rotationMode;  //тип вращения MODE_ROTATION_RIGHT по часовой, MODE_ROTATION_LEFT против
+uint8_t driverMode;   //тип привода  MODE_DRIVER_ROTATE поворотный и MODE_DRIVER_LINE линейный
+uint8_t directionPosMode;  //действие позиционера MODE_DIRECTION_FORWARD прямое и обратное MODE_DIRECTION_REVERSE
+uint8_t feedbackMode;  // действие обратной связи  MODE_FEEDBACK_FORWARD и  MODE_FEEDBACK_REVERSE
+uint8_t charachMode;  //характеристика  линейная MODE_CHARACTER_LINE, равнопроцентная  MODE_CHARACTER_PERCENT, пользовательская MODE_CHARACTER_USER
+
+uint8_t valveType0Per;   // 0% отсчека / предел
+uint8_t valveType100Per;   // 100% отсчека / предел
+
+float valve0Per;    //пределы клапан 0%
+float valve100Per;  //пределы клапан 100%
+
+float limit0Per;    //нижний предел 0%
+float limit100Per;  //верхний предел 100%
+
+float cut0Per;   //отсечка 0%
+float cut100Per; //отсечка 100%
+
+float Pinc;      // пид
+float Iinc;
+float Dinc;
+
+float Pdec;
+float Idec;
+float Ddec;
+
+float deadZoneUp;     //зона нечувствительности
+float deadZoneDown;
+float deadZoneValve;
+
+uint8_t lang;      //язык
+uint8_t displayMode; //режим отображения
+
+float input4mA;   // настройка вх ток петли
+float input20mA;
+
+float output4mA;  // настройка исх ток петли
+float output20mA;
+
+float angle45DegPlus;   //настройка углов
+float angle45DegMinus;
+
+float IPVolatge;
+float IPVolatgeStep;
+float IPVolatgeMax;
+uint8_t IPVoltageStepCount;
+float SpeedDown;
+float SpeedUp;
+
+uint16_t command;
+uint8_t *progress;
+
+//uint8_t saveOrAccept;  //save - 1, accept - 0
+uint8_t ErrorCount;
+uint32_t codeErorr;
+uint32_t codeWarning;
+
+uint8_t HARTState;
+uint8_t USBState;
+uint8_t CurLoopState;
+
+
+}displayData;
+
+
+
+extern menuItem menu_Diag0;
+extern menuItem menu_Diag1_0;
+extern menuItem menu_Diag1_1 ;
+extern menuItem menu_Diag1_2;
+extern menuItem menu_Diag1_3;
+extern menuItem menu_Diag1_4;
+extern menuItem menu_Diag1_5;
+extern menuItem menu_Diag1_6;
+extern menuItem menu_Diag1_7;
+extern menuItem menu_Diag1_8;
+extern menuItem menu_Diag1_9;
+extern menuItem menu_Diag1_10;
+extern menuItem menu_Diag1_11;
+extern menuItem menu_Diag1_12;
+extern menuItem menu_Diag1_13;
+extern menuItem menu_Diag1_14;
+extern menuItem menu_Diag1_15;
+extern menuItem menu_Diag1_16;
+extern menuItem menu_Diag1_17;
+extern menuItem menu_Diag1_18;
+
+extern menuItem menu_Mode_0;
+
+extern menuItem menu_ModeAuto_1_0;
+extern menuItem menu_ModeManual_1_1;
+extern menuItem menu_ModeSpeed_1_2;
+extern menuItem menu_ModeSetup_1_3;
+
+extern menuItem menu_ModeManual_1_1_0;
+extern menuItem menu_ModeManual_1_1_1;
+extern menuItem menu_ModeManual_1_1_2;
+extern menuItem menu_ModeManual_1_1_3;
+extern menuItem menu_ModeManual_1_1_4;
+
+extern menuItem menu_ModeSetup_1_3_0;
+extern menuItem menu_ModeSetup_1_3_1;
+extern menuItem menu_ModeSetup_1_3_2;
+extern menuItem menu_ModeSetup_1_3_3;
+extern menuItem menu_ModeSetup_1_3_4;
+
+extern menuItem menu_ModeSetupConf_1_3_0_0;
+extern menuItem menu_ModeSetupConf_1_3_0_1;
+extern menuItem menu_ModeSetupConf_1_3_0_2;
+extern menuItem menu_ModeSetupConf_1_3_0_3;
+extern menuItem menu_ModeSetupConf_1_3_0_4;
+
+extern menuItem menu_ModeSetupAStart_1_3_1_0;
+extern menuItem menu_ModeSetupAStart_1_3_1_1;
+extern menuItem menu_ModeSetupAStart_1_3_1_2;
+extern menuItem menu_ModeSetupAStart_1_3_1_3;
+extern menuItem menu_ModeSetupAStart_1_3_1_4;
+
+extern menuItem menu_ModeSetupLim_1_3_2_0;
+extern menuItem menu_ModeSetupLim_1_3_2_1;
+extern menuItem menu_ModeSetupLim_1_3_2_2;
+extern menuItem menu_ModeSetupLim_1_3_2_3;
+extern menuItem menu_ModeSetupLim_1_3_2_4;
+extern menuItem menu_ModeSetupLim_1_3_2_5;
+
+extern menuItem menu_ModeSetupReg_1_3_3_0;
+extern menuItem menu_ModeSetupReg_1_3_3_1;
+extern menuItem menu_ModeSetupReg_1_3_3_2;
+extern menuItem menu_ModeSetupReg_1_3_3_3;
+extern menuItem menu_ModeSetupReg_1_3_3_4;
+extern menuItem menu_ModeSetupReg_1_3_3_5;
+extern menuItem menu_ModeSetupReg_1_3_3_6;
+
+extern menuItem menu_ModeSetupServ_1_3_4_0;
+extern menuItem menu_ModeSetupServ_1_3_4_1;
+extern menuItem menu_ModeSetupServ_1_3_4_2;
+extern menuItem menu_ModeSetupServ_1_3_4_3;
+extern menuItem menu_ModeSetupServ_1_3_4_4;
+
+extern menuItem menu_ModeSetupConf_1_3_0_0_0 ;
+extern menuItem menu_ModeSetupConf_1_3_0_0_1 ;
+
+extern menuItem menu_ModeSetupConf_1_3_0_1_0 ;
+extern menuItem menu_ModeSetupConf_1_3_0_1_1 ;
+
+extern menuItem menu_ModeSetupConf_1_3_0_2_0 ;
+extern menuItem menu_ModeSetupConf_1_3_0_2_1 ;
+
+extern menuItem menu_ModeSetupConf_1_3_0_3_0 ;
+extern menuItem menu_ModeSetupConf_1_3_0_3_1 ;
+
+extern menuItem menu_ModeSetupConf_1_3_0_4_0 ;
+extern menuItem menu_ModeSetupConf_1_3_0_4_1 ;
+extern menuItem menu_ModeSetupConf_1_3_0_4_2 ;
+
+extern menuItem menu_ModeSetupServ_1_3_4_0_0 ;
+extern menuItem menu_ModeSetupServ_1_3_4_0_1 ;
+extern menuItem menu_ModeSetupServ_1_3_4_0_2 ;
+
+extern menuItem menu_ModeSetupServ_1_3_4_1_0 ;
+extern menuItem menu_ModeSetupServ_1_3_4_1_1 ;
+
+extern menuItem menu_ModeSetupServ_1_3_4_2_0 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_1 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_2 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_3 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_4 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_5 ;
+extern menuItem menu_ModeSetupServ_1_3_4_2_6 ;
+
+extern displayData dsData;
+
+extern screenItem *tmpScreen;
+extern errorList* tmpErr;
+extern acceptScr acceptScreen;
+
+extern menuItem* menu_item;
+
+#ifdef	__cplusplus
+extern "C" {
+#endif
+void  MakeMenu(menuItem *str, void *Next, void *Previous, void *Parent, void *Child, void *Screen);
+void  InitMenu(void);
+void RefreshMenu(void);
+
+menuItem* VoidToMenu (void* item);
+screenItem* VoidToScreen (void* item);
+errorList* VoidToErrList (void* item);
+
+
+#ifdef	__cplusplus
+}
+
+
+
+
+#endif
+
+#endif

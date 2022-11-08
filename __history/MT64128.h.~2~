@@ -1,0 +1,29 @@
+#ifndef __PLUG_MT_H
+#define __PLUG_MT_H
+
+
+
+
+typedef struct buff
+{
+  uint8_t LCD_buffer[128][8];
+
+}buff;
+
+extern buff MT12864_LCD1;
+
+
+#ifdef	__cplusplus
+extern "C" {
+#endif
+
+
+#ifdef	__cplusplus
+}
+
+
+
+
+#endif
+
+#endif

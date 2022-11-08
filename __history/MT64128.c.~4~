@@ -1,0 +1,16 @@
+#include "MT64128.h"
+
+
+
+uint8_t LCD_buff[LCD_BUFFLENGTH];
+
+
+buff MT12864_LCD1;
+
+
+MT12864_LCD1_buffer_clear()
+{
+    memset(MT12864_LCD1, 0, sizeof(MT12864_LCD1));
+    memset(LCD_buff, 0, sizeof(LCD_buff));
+}
+

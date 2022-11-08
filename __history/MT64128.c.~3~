@@ -1,0 +1,9 @@
+#include "MT64128.h"
+
+
+
+//uint8_t LCD_buff[LCD_BUFFLENGTH];
+
+
+buff MT12864_LCD1;
+

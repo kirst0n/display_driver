@@ -1,0 +1,38 @@
+#ifndef __OLED_CTRL_H
+#define __OLED_CTRL_H
+
+ #include "stdint.h"
+#include "font.h"
+
+#define OLED13_WIDTH	128
+#define OLED13_HEIGHT	64
+
+#define OLED13_BRIGHT 30
+
+#define OLED13_BUFFLENGTH (OLED13_WIDTH*OLED13_HEIGHT)/8
+
+
+extern uint8_t OLED13_buff[OLED13_BUFFLENGTH];
+#ifdef	__cplusplus
+extern "C" {
+#endif
+void OLED13_init(void);
+void OLED13_DrawPixel(uint8_t X, uint8_t Y, uint8_t State);
+void OLED13_DrawChar(uint16_t x, uint16_t y, char in_char_t, const tFont *font_L);
+void OLED13_DrawString(uint16_t x_L, uint16_t y_L, uint16_t num_char_L, uint16_t gap_L, char *str_buf_L, const tFont *font_L);
+uint16_t OLED13_DrawUInt(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint32_t num_L, uint8_t size_L, const tFont *font_L);
+void OLED13_DrawUFloat(uint16_t x_L, uint16_t y_L, uint16_t gap_L, float num_L, uint8_t sizeInt_L, uint8_t sizeFrac_L, const tFont *font_L);
+void OLED13_DrawRect(uint8_t fromX, uint8_t fromY, uint8_t toX, uint8_t toY);
+void OLED13_DrawRectFill(uint8_t fromX, uint8_t fromY, uint8_t toX, uint8_t toY);
+void OLED13_drawImage(uint16_t x_L, uint16_t y_L, const tImage *image_L);
+void OLED13_buffer_clear(void);
+void OLED13_update(void);
+#ifdef	__cplusplus
+}
+
+
+
+
+#endif
+
+#endif

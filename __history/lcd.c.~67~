@@ -1,0 +1,397 @@
+#include <string.h>
+#include "lcd.h"
+#include "wchar.h"
+#include "font_normal.h"
+#include "font_small.h"
+//#include "math_custom.h"
+#include "MT64128.h"
+//#include "io_ctrl.h"
+
+uint8_t ABB_Font_tCharCodeBuff[256];
+uint8_t LCD_All_Bolt_Font_tCharCodeBuff[256];
+uint8_t Font_with_pic_tCharCodeBuff[256];
+
+void LCD_FindChar_fontInit(const tFont *font_L, uint8_t *tCharCodeBuff_L)
+{
+	uint8_t i_L;
+	for(i_L = 0; i_L<font_L->length; i_L++)
+	{
+		tCharCodeBuff_L[font_L->chars[i_L].code] = i_L;
+	}
+}
+
+void LCD_init(void)
+{
+	MT12864_LCD1_init();
+	LCD_FindChar_fontInit(ABB_Font, ABB_Font_tCharCodeBuff);
+	LCD_FindChar_fontInit(LCD_All_Bolt, LCD_All_Bolt_Font_tCharCodeBuff);
+	LCD_FindChar_fontInit(Font_with_pic, Font_with_pic_tCharCodeBuff);
+}
+
+void LCD_buffer_clear(void)
+{
+   	MT12864_LCD1_buffer_clear();
+}
+
+
+
+float my_pow(float value, uint8_t step)
+{
+uint8_t i;
+float result;
+result = 1;
+
+    for (i = 0; i < step; i++) {
+     result*= value;
+    }
+    return result;
+}
+
+uint8_t findBit(const uint8_t *buff, uint16_t bitNum_L)
+{
+	uint8_t bitState_L;
+	
+	bitState_L = (buff[bitNum_L/8]>>(7-(bitNum_L - (bitNum_L/8)*8)))&0x01;
+
+	return bitState_L;
+}
+
+/*
+tChar LCD_FindChar(char in_char, const tFont *font_L)
+{
+	uint8_t t;
+	tChar tmp;
+	for(t=0;t<=font_L->length-1;t++)
+	{
+		if( (char)font_L->chars[t].code==in_char){tmp=font_L->chars[t];}
+	}
+	return tmp;
+}
+*/
+
+tChar LCD_FindChar(char in_char, const tFont *font_L)
+{
+	tChar tmp;
+	
+	if(font_L == ABB_Font)
+	{
+		tmp = font_L->chars[ABB_Font_tCharCodeBuff[(uint8_t)in_char]];
+	}
+	if(font_L == LCD_All_Bolt)
+	{
+		tmp = font_L->chars[LCD_All_Bolt_Font_tCharCodeBuff[(uint8_t)in_char]];
+	}
+
+		if(font_L == Font_with_pic)
+	{
+		tmp = font_L->chars[Font_with_pic_tCharCodeBuff[(uint8_t)in_char]];
+	}
+	
+	return tmp;
+}
+
+
+
+void LCD_DrawPixel(uint8_t x_L, uint8_t y_L, uint8_t pixState_L)
+{
+	//MT12864_LCD1_setPixel_inBuf(x_L, y_L, pixState_L);
+}
+
+uint8_t *LCD_getBuffPtr(void)
+{
+	return (uint8_t *)MT12864_LCD1.LCD_buffer;
+}
+
+/*
+void LCD_DrawChar(uint16_t x, uint16_t y, char in_char_t, const tFont *font_L, uint8_t inverse)
+{
+	uint16_t x_c;
+	uint16_t y_c;
+	uint16_t byte_num = 0;
+	uint16_t width = 0;
+	uint16_t height = 0;
+	tChar tmp;
+	uint8_t bitState;
+
+	tmp = LCD_FindChar(in_char_t, font_L);
+	width = tmp.image->width;
+	height = tmp.image->height;
+	
+	for(y_c=0;y_c<(height);y_c++)
+	{
+		if(width%8){byte_num = (width/8+1)*(y_c);}
+		else{byte_num = (width/8)*(y_c);}
+		
+		for(x_c=0; x_c<width; x_c++)
+		{
+            bitState = findBit(tmp.image->data + byte_num, x_c);
+            if(inverse)
+            {
+                 if(bitState) bitState =0x00;
+                 else   bitState = 0x01;
+            }
+			LCD_DrawPixel(x+x_c, y+y_c, bitState);
+		}
+	}
+}
+*/
+
+void LCD_Plot_Horisontal_Line(uint8_t x_start, uint8_t x_stop, uint8_t y_L, uint8_t ScrReverse)
+{
+uint8_t i;
+uint8_t y_C, x_stop_C, x_start_C;
+if(ScrReverse>0)
+{
+y_C = y_L;
+x_stop_C = x_stop;
+x_start_C = x_start;
+for (i = x_stop_C; i >=x_start_C ; i--) {
+MT12864_LCD1.LCD_buffer[y_C/8][i] |= (0x01<<(y_C%8));
+}
+
+}
+else
+{
+y_C = LCD_HEIGHT - 1 - y_L;
+x_stop_C = LCD_WIDTH - 1 - x_stop;
+x_start_C = LCD_WIDTH - 1 - x_start;
+for (i = x_stop_C; i <=x_start_C ; i++) {
+MT12864_LCD1.LCD_buffer[y_C/8][i] |= (0x01<<(y_C%8));
+}
+}
+}
+
+void LCD_Plot_Vertical_Line(uint8_t x_L, uint8_t y_start, uint8_t y_stop, uint8_t ScrReverse)
+{
+uint8_t i;
+uint8_t x_C, y_stop_C, y_start_C;
+
+if(ScrReverse>0)
+{
+x_C = x_L;
+y_stop_C = y_stop;
+y_start_C = y_start;
+for (i = y_stop_C; i >=y_start_C ; i--) {
+MT12864_LCD1.LCD_buffer[i/8][x_C] |= (0x01<<(i%8));
+}
+
+}
+else
+{
+x_C = LCD_WIDTH - 1 - x_L;
+y_stop_C = LCD_HEIGHT - 1 - y_stop;
+y_start_C = LCD_HEIGHT - 1 - y_start;
+for (i = y_stop_C; i <=y_start_C ; i++) {
+MT12864_LCD1.LCD_buffer[i/8][x_C] |= (0x01<<(i%8));
+}
+}
+}
+
+void LCD_DrawChar(uint16_t x, uint16_t y, char in_char_t, const tFont *font_L, uint8_t inverse)
+{
+ uint8_t i_L;
+ uint8_t j_L;
+ uint16_t width;
+ uint16_t height;
+ uint16_t heightPlot;
+ tChar tmpChar_L;
+ uint8_t shifhBitNum_L;
+ uint8_t charData_L;
+ uint8_t shifhBitMask1_L;
+ uint8_t shifhBitMask2_L;
+
+ tmpChar_L = LCD_FindChar(in_char_t, font_L);
+ width = tmpChar_L.image->width;
+ height = tmpChar_L.image->height;
+ shifhBitNum_L = y-((y/8)*8);
+ shifhBitMask1_L = 0xFF<<(8-shifhBitNum_L);
+ shifhBitMask2_L = 0xFF>>(shifhBitNum_L);
+
+ if((height%8)>0)
+ {heightPlot = (height/8)+1;}
+ else
+ {heightPlot = height/8;}
+
+
+ for(i_L = 0; i_L < heightPlot; i_L++)
+ {
+  for(j_L = 0; j_L < width; j_L++)
+  {
+   if((i_L%2)==0)
+   {
+    charData_L = tmpChar_L.image->data[j_L + i_L*(width)];
+    if(inverse){charData_L = ~charData_L;}
+    charData_L = (charData_L>>shifhBitNum_L)&shifhBitMask2_L;
+    MT12864_LCD1.LCD_buffer[7-i_L - y/8][127-j_L - x] |= charData_L;
+
+  charData_L = tmpChar_L.image->data[j_L + (i_L+1)*(width)];
+  if(inverse){charData_L = ~charData_L&shifhBitMask1_L;}
+    charData_L = (charData_L<<(8-(shifhBitNum_L)))&(shifhBitMask1_L);
+    if(i_L==0){MT12864_LCD1.LCD_buffer[7-i_L-2-y/8][127-j_L-x] |= charData_L;}
+
+  charData_L = tmpChar_L.image->data[j_L + (i_L)*(width)];
+    if(inverse){charData_L = ~charData_L;}
+    charData_L = (charData_L<<(8-shifhBitNum_L))&shifhBitMask1_L;
+    MT12864_LCD1.LCD_buffer[7-i_L -1 - y/8][127 - j_L-x] |= charData_L;
+   }
+   else
+   {
+
+    charData_L = tmpChar_L.image->data[j_L + i_L*(width)];
+    if(inverse){charData_L = ~charData_L;}
+  charData_L = (charData_L>>shifhBitNum_L)&shifhBitMask2_L;
+  MT12864_LCD1.LCD_buffer[7-i_L-y/8][127-j_L-x] |= charData_L;
+
+    charData_L = tmpChar_L.image->data[j_L + (i_L-1)*(width)];
+    if(inverse){charData_L = ~charData_L;}
+    charData_L = (charData_L<<(8-shifhBitNum_L))&shifhBitMask1_L;
+    MT12864_LCD1.LCD_buffer[7-i_L - y/8][127 - j_L-x] |= charData_L;
+   }
+  }
+ }
+}
+
+		
+void LCD_DrawString(uint16_t x_L, uint16_t y_L, uint16_t num_char_L, uint16_t gap_L, char *str_buf_L, const tFont *font_L, uint8_t inverse)
+{
+	
+	uint16_t i_L;
+	uint16_t fontWidth_L;
+	uint32_t fontWidthSumm_L = 0;
+	tChar tmp_L;
+
+	for(i_L = 0; i_L < num_char_L; i_L++)
+	{
+		tmp_L = LCD_FindChar(str_buf_L[i_L], font_L);
+		fontWidth_L = tmp_L.image->width;
+		LCD_DrawChar(x_L + gap_L + fontWidthSumm_L, y_L, str_buf_L[i_L], font_L,inverse);
+		fontWidthSumm_L = fontWidthSumm_L + fontWidth_L + gap_L;
+	}
+}
+
+uint16_t LCD_DrawUInt(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint32_t num_L, uint8_t size_L, const tFont *font_L)
+{
+	uint32_t numCurr_L;
+	uint16_t fontWidth_L = 0;
+	uint16_t x_shift_L = 0;
+	uint8_t i_L;
+	tChar tmp_L;
+	
+	for(i_L=0;i_L<size_L;i_L++)
+	{
+		numCurr_L = (num_L/(uint32_t)my_pow(10, size_L - i_L - 1))%10;
+		tmp_L = LCD_FindChar(numCurr_L+0x30, font_L);
+		fontWidth_L = tmp_L.image->width;
+		LCD_DrawChar(x_L + x_shift_L, y_L, numCurr_L+0x30, font_L,0);
+		x_shift_L = x_shift_L + gap_L + fontWidth_L;
+	}
+	return x_shift_L - gap_L;
+}
+
+void LCD_DrawUFloat(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint8_t setNum, float num_L, uint8_t sizeInt_L, uint8_t sizeFrac_L, const tFont *font_L)
+{
+	char float_to_str[17];
+	uint32_t pow_i,digit;
+	uint16_t sepWidth_L;
+	float val;
+
+	if(num_L<0) {
+		float_to_str[0] = '-';
+		val = num_L *-1.0;
+ }
+ else  {
+ float_to_str[0] = '+';
+ val=num_L;
+ }
+ float_to_str[sizeInt_L+1]='.';
+
+ digit = (uint32_t)(val*my_pow(10,sizeFrac_L+1));
+ if(digit%10>=5) digit = digit+10;
+ digit = digit / 10;
+ for (pow_i = sizeInt_L+sizeFrac_L+1; pow_i > 0; pow_i--) {
+   if(pow_i!=sizeInt_L+1) {
+   float_to_str[pow_i] = digit%10 + 0x30;
+   digit = digit / 10;
+   }
+ }
+ /*
+ for (pow_i = 0; pow_i < sizeInt_L; pow_i++) {
+
+  digit = ((uint32_t)(val/my_pow(10,pow_i)))%10;
+  float_to_str[sizeInt_L-pow_i] = digit + 0x30;
+ }
+
+ for (pow_i = 1; pow_i <= sizeFrac_L; pow_i++) {
+
+  digit = ((uint32_t)(val*my_pow(10,pow_i)))%10;
+  float_to_str[sizeInt_L+pow_i+1] = digit + 0x30;
+ }
+
+  */
+ sepWidth_L = 0;
+ for (pow_i = 0; pow_i < sizeInt_L+sizeFrac_L+2; pow_i++) {
+ if(setNum==pow_i) LCD_DrawChar(x_L+sepWidth_L, y_L, float_to_str[pow_i], font_L,1);
+  else LCD_DrawChar(x_L+sepWidth_L, y_L, float_to_str[pow_i], font_L,0);
+  sepWidth_L += LCD_FindChar(float_to_str[pow_i], font_L).image->width+gap_L;
+ }
+
+	
+}
+
+
+void LCD_drawImage(uint16_t x_L, uint16_t y_L, const tImage *image_L)
+{
+	uint16_t x_c;
+	uint16_t y_c;
+	uint16_t byte_num = 0;
+	uint16_t width = 0;
+	uint16_t height = 0;
+
+	
+	width = image_L->width;
+	height = image_L->height;
+	
+	for(y_c=0;y_c<(height);y_c++)
+	{
+		if(width%8){byte_num = (width/8+1)*(y_c);}
+		else{byte_num = (width/8)*(y_c);}
+		
+		for(x_c=0; x_c<width; x_c++)
+		{
+			LCD_DrawPixel(x_L+x_c, y_L+y_c, findBit(image_L->data + byte_num, x_c));
+		}
+	}
+}
+
+void LCD_DrawRect(uint8_t fromX, uint8_t fromY, uint8_t toX, uint8_t toY)
+{
+	uint8_t i_L;
+
+	for(i_L = fromX;i_L <= toX;i_L++)
+	{
+		LCD_DrawPixel(i_L, fromY, 1);
+		LCD_DrawPixel(i_L, toY, 1);
+	}
+	for(i_L = fromY;i_L <= toY;i_L++)
+	{
+		LCD_DrawPixel(fromX, i_L, 1);
+		LCD_DrawPixel(toX, i_L, 1);
+	}
+}
+
+void LCD_DrawRectFill(uint8_t fromX, uint8_t fromY, uint8_t toX, uint8_t toY)
+{
+	uint8_t i_L;
+	uint8_t j_L;	
+	
+	for(i_L = fromX;i_L <= toX;i_L++)
+	{
+		for(j_L = fromY;j_L <= toY;j_L++)
+		{
+			LCD_DrawPixel(i_L, j_L, 1);
+		}
+	}
+}
+
+
+

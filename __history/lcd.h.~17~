@@ -1,0 +1,65 @@
+#ifndef __LCD_CTRL_H
+#define __LCD_CTRL_H
+
+
+//#include <inttypes.h>
+#include "font_normal.h"
+#include "font_small.h"
+#include "font_pics.h"
+#define DISPLAY_USE DISPLAY_ST7565R
+//#define DISPLAY_USE DISPLAY_MT64128
+
+#define LCD_WIDTH	128
+#define LCD_HEIGHT	64
+
+#define LCD_BRIGHT 30
+
+#define LCD_FONT_WIDTH 1
+
+
+
+#define LCD_BUFFLENGTH (LCD_WIDTH*LCD_HEIGHT)/8
+
+extern uint8_t ABB_Font_tCharCodeBuff[256];
+extern uint8_t LCD_All_Bolt_Font_tCharCodeBuff[256];
+extern uint8_t LCD_buff[LCD_BUFFLENGTH];
+typedef enum fontTypeName
+{
+	fontBig,
+	fontSmall
+	
+}fontTypeName;
+
+
+
+#ifdef	__cplusplus
+extern "C" {
+#endif
+
+void LCD_init(void);
+void LCD_buffer_clear(void);
+
+void LCD_DrawPixel(uint8_t x_L, uint8_t y_L, uint8_t pixState_L);
+	
+void LCD_DrawString(uint16_t x_L, uint16_t y_L, uint16_t num_char_L, uint16_t gap_L, char *str_buf_L, const tFont *font_L, uint8_t inverse);
+uint16_t LCD_DrawUInt(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint32_t num_L, uint8_t size_L, const tFont *font_L);
+void LCD_DrawUFloat(uint16_t x_L, uint16_t y_L, uint16_t gap_L, uint8_t setNum, float num_L, uint8_t sizeInt_L, uint8_t sizeFrac_L, const tFont *font_L);
+void LCD_DrawChar(uint16_t x, uint16_t y, char in_char_t, const tFont *font_L, uint8_t inverse);
+void LCD_Plot_Horisontal_Line(uint8_t x_start, uint8_t x_stop, uint8_t y_L, uint8_t ScrReverse);
+void LCD_Plot_Vertical_Line(uint8_t x_L, uint8_t y_start, uint8_t y_stop, uint8_t ScrReverse);
+
+float my_pow(float value, uint8_t step);
+
+
+void LCD_DrawChar2(uint16_t x, uint16_t y, char in_char_t, const tFont *font_L, uint8_t inverse);
+
+
+#ifdef	__cplusplus
+}
+
+
+
+
+#endif
+
+#endif
